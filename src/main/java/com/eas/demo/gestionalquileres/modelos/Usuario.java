@@ -12,11 +12,21 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUsuario;
+    private Long idUsuario;
+
+    @Column (name = "username", length = 60, nullable = false)
     private String username;
+
+    @Column (name = "nombre", length = 60, nullable = false)
     private String nombre;
+
+    @Column (name = "apellido", length = 60, nullable = false)
     private String apellido;
+
+    @Column (name = "password", length = 60, nullable = false)
     private String password;
+
+    @Column (name = "fecha_registro", nullable = false)
     private String fechaRegistro;
 
 }
