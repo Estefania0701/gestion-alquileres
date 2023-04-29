@@ -31,12 +31,20 @@ public class UsuarioControlador {
         return repositorio.save(usuario);
     }
 
+    // Obtiene un usuario por su ID
+    @GetMapping("/usuarios/{id}")
+    public ResponseEntity<Usuario> consultarUsuarioPorId(@PathVariable Long id) {
+        Usuario usuario = repositorio.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario con el ID : " + id));
+        return ResponseEntity.ok(usuario);
+    }
+
     // Elimina un usuari de la BBDD
     @DeleteMapping("/usuarios/{id}")
     public ResponseEntity<Map<String, Boolean>> eliminarUsuario (@PathVariable Long id) {
         // si el usuario no existe, levanto la excepción personalizada
         Usuario usuario = repositorio.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No existe el empleado con el ID : " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario con el ID : " + id));
 
         // ----- Si el usuario sí existe
 
