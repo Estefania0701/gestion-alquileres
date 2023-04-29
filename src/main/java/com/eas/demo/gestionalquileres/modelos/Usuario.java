@@ -26,7 +26,7 @@ public class Usuario {
     @Column (name = "password", length = 60, nullable = false)
     private String password;
 
-    @Column (name = "fecha_registro", nullable = false)
-    private String fechaRegistro;
+    @Column (name = "registro", nullable = false)
+    private String registro;
 
 }
