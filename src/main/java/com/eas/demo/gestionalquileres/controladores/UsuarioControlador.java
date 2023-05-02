@@ -3,6 +3,7 @@ package com.eas.demo.gestionalquileres.controladores;
 import com.eas.demo.gestionalquileres.excepciones.ResourceNotFoundException;
 import com.eas.demo.gestionalquileres.modelos.Usuario;
 import com.eas.demo.gestionalquileres.repositorio.UsuarioRepositorio;
+import com.eas.demo.gestionalquileres.utils.FechaActual;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +14,14 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = "http://localhost:4200/")
-//@CrossOrigin(origins = "https://estefania0701.github.io/")
+//@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = "https://estefania0701.github.io/")
 public class UsuarioControlador {
 
     @Autowired
     private UsuarioRepositorio repositorio;
+
+
 
     // Obtiene el listado de todos los usuarios de la BBDD
     @GetMapping("/usuarios")
@@ -29,6 +32,11 @@ public class UsuarioControlador {
     // Crea un nuevo usuario en la BBDD
     @PostMapping("/usuarios")
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
+
+        FechaActual fechaActual = new FechaActual();
+
+        String fechaRegistro = fechaActual.obtenerFechaActual();
+        usuario.setRegistro(fechaRegistro);
         return repositorio.save(usuario);
     }
 
