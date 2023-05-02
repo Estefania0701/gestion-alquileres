@@ -14,6 +14,13 @@ public class MedioPago {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idMediopago;
 
+    @ManyToOne
+    @JoinColumn (name = "usuario_id")
+    private Usuario usuario;
+
     @Column (name = "tipo")
     private String tipo;
+
+    @Column (name = "numerotarjeta")
+    private Long numerotarjeta;
 }

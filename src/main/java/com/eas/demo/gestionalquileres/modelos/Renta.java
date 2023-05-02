@@ -14,20 +14,17 @@ public class Renta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idRenta;
 
-    // Llaves foraneas
-    @ManyToOne // muchas rentas para un usuario, un usuario para una renta
-    @JoinColumn (name = "usuario_id")
-    private Usuario usuario;
+    @Column (name = "vehiculo", length = 20, nullable = false)
+    private String vehiculo;
 
-    @ManyToOne // una renta tiene un medio de pago, un medio de pago puede estar en muchas rentas
+    @Column (name = "valor", length = 20, nullable = false)
+    private Long valor;
+
+    @ManyToOne
     @JoinColumn (name = "mediopago_id")
-    private MedioPago mediopago;
+    private MedioPago medioPago;
 
-    @ManyToOne // una renta tiene solo un vehiculo, un vehiculo solo puede estar en una renta
-    @JoinColumn (name = "vehiculo_id")
-    private Vehiculo vehiculo;
-
-    @Column (name = "estado", length = 60, nullable = true)
+    @Column (name = "estado", length = 60, nullable = false)
     private String estado;
 
     @Column (name = "inicio", length = 60, nullable = true)
@@ -35,4 +32,6 @@ public class Renta {
 
     @Column (name = "fin", length = 60, nullable = true)
     private String fin;
+
+
 }

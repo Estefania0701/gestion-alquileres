@@ -1,16 +1,17 @@
 package com.eas.demo.gestionalquileres.controladores;
 
 import com.eas.demo.gestionalquileres.excepciones.ResourceNotFoundException;
+import com.eas.demo.gestionalquileres.modelos.MedioPago;
 import com.eas.demo.gestionalquileres.modelos.Usuario;
+import com.eas.demo.gestionalquileres.repositorio.MedioPagoRepositorio;
 import com.eas.demo.gestionalquileres.repositorio.UsuarioRepositorio;
 import com.eas.demo.gestionalquileres.utils.FechaActual;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -21,6 +22,8 @@ public class UsuarioControlador {
     @Autowired
     private UsuarioRepositorio repositorio;
 
+    @Autowired
+    private MedioPagoRepositorio repositorioMP;
 
 
     // Obtiene el listado de todos los usuarios de la BBDD
@@ -40,15 +43,28 @@ public class UsuarioControlador {
         return repositorio.save(usuario);
     }
 
-    // Obtiene un usuario por su ID
     @GetMapping("/usuarios/{id}")
-    public ResponseEntity<Usuario> consultarUsuarioPorId(@PathVariable Long id) {
+    public ResponseEntity<List<Object>> consultarUsuarioPorId(@PathVariable Long id) {
         Usuario usuario = repositorio.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe el usuario con el ID : " + id));
-        return ResponseEntity.ok(usuario);
+
+        List<MedioPago> mediosPago = repositorioMP.findAll();
+
+        // filtro los medios de pago por el Id del usuario
+        List<MedioPago> mediosPagoUsuario = mediosPago.stream()
+                .filter(mp -> mp.getUsuario().getIdUsuario().equals(usuario.getIdUsuario()))
+                .collect(Collectors.toList());
+
+
+        List<Object> respuesta = new ArrayList<>();
+
+        respuesta.add(usuario);
+        respuesta.add(mediosPagoUsuario);
+
+        return ResponseEntity.ok(respuesta);
     }
 
-    // Elimina un usuari de la BBDD
+    // Elimina un usuario de la BBDD
     @DeleteMapping("/usuarios/{id}")
     public ResponseEntity<Map<String, Boolean>> eliminarUsuario (@PathVariable Long id) {
         // si el usuario no existe, levanto la excepción personalizada
@@ -67,5 +83,15 @@ public class UsuarioControlador {
         respuesta.put("eliminar", Boolean.TRUE);
 
         return ResponseEntity.ok(respuesta);
+    }
+
+    @PutMapping("/usuarios/{id}")
+    public String eliminarUsuario() {
+        return "No es posible actualizar usuarios";
+    }
+
+    @PutMapping("/usuarios")
+    public String eliminaUsuarios() {
+        return "No es posible actualizar usuarios";
     }
 }
